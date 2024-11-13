@@ -20,8 +20,13 @@ discovery:
     unsafeSkipCAVerification: true
 {% endif %}
 {% endif %}
-  timeout: {{ discovery_timeout }}
   tlsBootstrapToken: {{ kubeadm_token }}
+{% if 'v1beta4' != kubeadm_config_api_version %}
+  timeout: {{ discovery_timeout }}
+{% else %}
+timeouts:
+  discovery: {{ discovery_timeout }}
+{% endif %}
 caCertPath: {{ kube_cert_dir }}/ca.crt
 {% if kubeadm_cert_controlplane is defined and kubeadm_cert_controlplane %}
 controlPlane:
